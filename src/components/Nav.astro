@@ -1,6 +1,8 @@
 ---
+import { Image } from "astro:assets";
+import wordmark from "../assets/aspiron/wordmark.png";
+
 // Aspiron nav: brand mark · 3 colored brand pills · 3 page links · black Contact CTA
-const imgWordmark = "https://www.figma.com/api/mcp/asset/ba95b237-4008-4969-8924-671b5504da2b";
 ---
 
 <header class="absolute inset-x-0 top-0 z-50 h-[100px]">
@@ -8,7 +10,12 @@ const imgWordmark = "https://www.figma.com/api/mcp/asset/ba95b237-4008-4969-8924
     <div class="flex items-center gap-12">
       <!-- Brand mark -->
       <a href="/" class="block h-10 w-[219px]" aria-label="Aspiron home">
-        <img src={imgWordmark} alt="Aspiron" class="h-full w-full object-contain object-left" />
+        <Image
+          src={wordmark}
+          alt="Aspiron"
+          width={438}
+          class="h-full w-full object-contain object-left"
+        />
       </a>
 
       <!-- Brand product pills -->

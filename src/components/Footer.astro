@@ -1,7 +1,8 @@
 ---
-const imgFooterLogo = "https://www.figma.com/api/mcp/asset/d6aaee8d-a197-4ab1-9464-01585163b37b";
-const imgSocialIcon = "https://www.figma.com/api/mcp/asset/a35b11fb-d50c-4c12-a9fe-abe576b2bf4b";
-const imgSocialIcon2 = "https://www.figma.com/api/mcp/asset/b6772800-3015-4526-9844-e79d85e69cf7";
+import { Image } from "astro:assets";
+import footerLogo from "../assets/aspiron/footer-logo.png";
+import socialIcon1 from "../assets/aspiron/social-icon-1.png";
+import socialIcon2 from "../assets/aspiron/social-icon-2.png";
 
 const linkColumns = [
   {
@@ -24,21 +25,26 @@ const linkColumns = [
     <div class="flex w-full items-start gap-6">
       <!-- Brand block -->
       <div class="flex w-[394px] flex-col items-center gap-10">
-        <img src={imgFooterLogo} alt="Aspiron" class="h-[233px] w-[251px] object-contain" />
+        <Image
+          src={footerLogo}
+          alt="Aspiron"
+          width={500}
+          class="h-[233px] w-[251px] object-contain"
+        />
         <div class="flex gap-2.5">
           <a
             href="#"
             class="grid h-14 w-14 place-items-center rounded-[42px] bg-black transition hover:opacity-80"
             aria-label="LinkedIn"
           >
-            <img src={imgSocialIcon} alt="" class="h-6 w-6" />
+            <Image src={socialIcon1} alt="" width={48} class="h-6 w-6" />
           </a>
           <a
             href="#"
             class="grid h-14 w-14 place-items-center rounded-[42px] bg-black transition hover:opacity-80"
             aria-label="X"
           >
-            <img src={imgSocialIcon2} alt="" class="h-6 w-6" />
+            <Image src={socialIcon2} alt="" width={48} class="h-6 w-6" />
           </a>
         </div>
       </div>

@@ -1,27 +1,30 @@
 ---
-// Hero with chrome/gold liquid metal background image
-const imgHeroBg = "https://www.figma.com/api/mcp/asset/3ecc3d9c-8442-4cb5-84bf-c5d2af69eb40";
-const imgCynet = "https://www.figma.com/api/mcp/asset/a7a4f281-7aa3-44f2-9858-b87d6e02a046";
-const imgQradar = "https://www.figma.com/api/mcp/asset/2117e12f-f83a-4c5d-93b3-75a01ced624d";
-const imgQradar2 = "https://www.figma.com/api/mcp/asset/d0ee5770-8b44-4e7b-94d8-794561f42ad5";
-const imgCynet2 = "https://www.figma.com/api/mcp/asset/efd06e32-5d76-4b48-b42c-a0e28f717739";
+import { Image } from "astro:assets";
+import heroBg from "../assets/aspiron/hero-bg.png";
+import cynet from "../assets/aspiron/cynet.png";
+import qradar from "../assets/aspiron/qradar.png";
+import qradar2 from "../assets/aspiron/qradar-2.png";
+import cynet2 from "../assets/aspiron/cynet-2.png";
 
 const trustLogos = [
-  { name: "cynet", src: imgCynet, w: 130 },
-  { name: "qradar", src: imgQradar, w: 116 },
-  { name: "cynet", src: imgCynet2, w: 130 },
-  { name: "qradar", src: imgQradar2, w: 116 },
-  { name: "cynet", src: imgCynet, w: 130 },
-  { name: "qradar", src: imgQradar, w: 116 },
+  { name: "cynet", src: cynet },
+  { name: "qradar", src: qradar },
+  { name: "cynet", src: cynet2 },
+  { name: "qradar", src: qradar2 },
+  { name: "cynet", src: cynet },
+  { name: "qradar", src: qradar },
 ];
 ---
 
 <section class="relative overflow-hidden pt-[400px] pb-20">
   <!-- Chrome/gold liquid metal background — full viewport width, edge to edge -->
-  <img
-    src={imgHeroBg}
+  <Image
+    src={heroBg}
     alt=""
-    aria-hidden="true"
+    widths={[1280, 1920, 2560]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
     class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-auto w-full select-none"
   />
 
@@ -43,11 +46,11 @@ const trustLogos = [
     <div class="flex w-full max-w-[1488px] flex-wrap items-center justify-center gap-x-20 gap-y-6">
       {
         trustLogos.map((logo) => (
-          <img
+          <Image
             src={logo.src}
             alt={logo.name}
+            width={260}
             class="h-8 w-auto object-contain"
-            style={`max-width:${logo.w}px;`}
           />
         ))
       }
