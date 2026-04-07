@@ -2,35 +2,199 @@
 import { Image } from "astro:assets";
 import wordmark from "../assets/aspiron/wordmark.png";
 
-// Aspiron nav: brand mark · 3 colored brand pills · 3 page links · black Contact CTA
+const productPills = [
+  { label: "Search", href: "#search", class: "btn-pill-search" },
+  { label: "Influence", href: "#influence", class: "btn-pill-influence" },
+  { label: "Ventures", href: "#ventures", class: "btn-pill-ventures" },
+];
+
+const navLinks = [
+  { label: "Portfolio", href: "#portfolio" },
+  { label: "News", href: "#news" },
+  { label: "About", href: "#about" },
+];
 ---
 
-<header class="absolute inset-x-0 top-0 z-50 h-[100px]">
+<header
+  data-nav
+  class="fixed inset-x-0 top-0 z-50 h-[100px] transition-colors duration-300"
+>
   <div class="container-page flex h-full items-center justify-between">
-    <div class="flex items-center gap-12">
-      <!-- Brand mark -->
-      <a href="/" class="block h-10 w-[219px]" aria-label="Aspiron home">
-        <Image
-          src={wordmark}
-          alt="Aspiron"
-          width={438}
-          class="h-full w-full object-contain object-left"
-        />
-      </a>
+    <!-- Logo (always visible) -->
+    <a href="/" class="block h-10 w-[160px] md:w-[219px]" aria-label="Aspiron home">
+      <Image
+        src={wordmark}
+        alt="Aspiron"
+        width={438}
+        class="h-full w-full object-contain object-left"
+      />
+    </a>
 
-      <!-- Brand product pills -->
+    <!-- Desktop nav (lg+) -->
+    <div class="hidden items-center gap-12 lg:flex">
       <div class="flex items-center gap-5">
-        <a href="#search" class="btn-pill-search">Search</a>
-        <a href="#influence" class="btn-pill-influence">Influence</a>
-        <a href="#ventures" class="btn-pill-ventures">Ventures</a>
+        {
+          productPills.map((p) => (
+            <a href={p.href} class={p.class}>
+              {p.label}
+            </a>
+          ))
+        }
       </div>
     </div>
 
-    <div class="flex items-center gap-5">
-      <a href="#portfolio" class="nav-link w-[120px]">Portfolio</a>
-      <a href="#news" class="nav-link w-[120px]">News</a>
-      <a href="#about" class="nav-link w-[120px]">About</a>
+    <div class="hidden items-center gap-5 lg:flex">
+      {
+        navLinks.map((l) => (
+          <a href={l.href} class="nav-link w-[120px]">
+            {l.label}
+          </a>
+        ))
+      }
       <a href="#contact" class="btn-cta">Contact</a>
     </div>
+
+    <!-- Mobile hamburger (< lg) -->
+    <button
+      type="button"
+      data-nav-toggle
+      aria-label="Open menu"
+      aria-expanded="false"
+      class="grid h-12 w-12 place-items-center rounded-pill border border-black bg-black text-cta-yellow transition lg:hidden"
+    >
+      <svg
+        data-nav-icon-open
+        viewBox="0 0 24 24"
+        class="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        <path d="M3 7h18M3 12h18M3 17h18" />
+      </svg>
+      <svg
+        data-nav-icon-close
+        viewBox="0 0 24 24"
+        class="hidden h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
   </div>
 </header>
+
+<!-- Mobile drawer (full-screen overlay, slides from top) -->
+<div
+  data-nav-drawer
+  aria-hidden="true"
+  class="invisible fixed inset-0 z-40 -translate-y-full bg-bg opacity-0 transition-all duration-500 ease-out lg:hidden"
+>
+  <div class="container-page flex h-full flex-col gap-12 pt-[120px] pb-10">
+    <!-- Brand product pills -->
+    <div class="flex flex-col gap-4">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] opacity-60">
+        Our Brands
+      </p>
+      <div class="flex flex-wrap gap-3">
+        {
+          productPills.map((p) => (
+            <a href={p.href} data-nav-link class={`${p.class} text-[18px]`}>
+              {p.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Page links -->
+    <div class="flex flex-col gap-4">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] opacity-60">
+        Menu
+      </p>
+      <nav class="flex flex-col gap-2">
+        {
+          navLinks.map((l) => (
+            <a
+              href={l.href}
+              data-nav-link
+              class="font-display text-[36px] font-bold tracking-tight text-black transition hover:opacity-60"
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+
+    <!-- Contact CTA at bottom -->
+    <a
+      href="#contact"
+      data-nav-link
+      class="btn-cta mt-auto !w-full !py-4 !text-[18px]"
+    >
+      Contact
+    </a>
+  </div>
+</div>
+
+<script>
+  // Scroll-aware backdrop on the fixed header
+  const header = document.querySelector<HTMLElement>("[data-nav]");
+  const updateScrollState = () => {
+    if (!header) return;
+    const scrolled = window.scrollY > 24;
+    header.classList.toggle("bg-bg/70", scrolled);
+    header.classList.toggle("backdrop-blur-md", scrolled);
+    header.classList.toggle("border-b", scrolled);
+    header.classList.toggle("border-black/5", scrolled);
+  };
+  updateScrollState();
+  window.addEventListener("scroll", updateScrollState, { passive: true });
+
+  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const drawer = document.querySelector<HTMLDivElement>("[data-nav-drawer]");
+  const iconOpen = document.querySelector<SVGElement>("[data-nav-icon-open]");
+  const iconClose = document.querySelector<SVGElement>("[data-nav-icon-close]");
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]");
+
+  if (toggle && drawer && iconOpen && iconClose) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      drawer.setAttribute("aria-hidden", String(!open));
+
+      drawer.classList.toggle("invisible", !open);
+      drawer.classList.toggle("opacity-0", !open);
+      drawer.classList.toggle("-translate-y-full", !open);
+      drawer.classList.toggle("opacity-100", open);
+      drawer.classList.toggle("translate-y-0", open);
+
+      iconOpen.classList.toggle("hidden", open);
+      iconClose.classList.toggle("hidden", !open);
+
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    toggle.addEventListener("click", () => {
+      const isOpen = toggle.getAttribute("aria-expanded") === "true";
+      setOpen(!isOpen);
+    });
+
+    // Close drawer when any link inside is clicked
+    links.forEach((link) =>
+      link.addEventListener("click", () => setOpen(false)),
+    );
+
+    // Close on Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+      }
+    });
+  }
+</script>
