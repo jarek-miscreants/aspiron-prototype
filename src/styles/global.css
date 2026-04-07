@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ASPIRON GROUP DESIGN TOKENS (extracted from Figma)
+   ========================================================================== */
+@theme {
+  /* ---------- Colors ---------- */
+  --color-bg: #e5dfd3;          /* Neutral/Grey — page background */
+  --color-cream: #fcf9ef;       /* Cream card background */
+  --color-white: #f7f8f3;       /* Neutral/White */
+  --color-black: #000000;
+  --color-line: #bbb1a6;        /* Pagination border */
+
+  /* Brand golds */
+  --color-aspiron-gold: #ab8748;
+  --color-search-gold: #d8923e;
+  --color-influence-rose: #ffa57e;
+  --color-ventures-white-gold: #eecab0;
+  --color-cta-yellow: #ffcb76;  /* Yellow text on black CTA buttons */
+
+  /* ---------- Spacing ---------- */
+  --spacing-gutter: 2.5rem;     /* 40px */
+  --spacing-section: 5rem;
+
+  /* ---------- Typography ---------- */
+  --font-display:
+    "Zalando Sans Expanded", "Inter Tight", "Inter", system-ui, sans-serif;
+  --font-body:
+    "Zalando Sans", "Inter", system-ui, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Display sizes */
+  --text-h1: 4.25rem;            /* 68px */
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: 0.04em;
+
+  --text-h2: 2.75rem;            /* 44px */
+  --text-h2--line-height: 1.05;
+
+  --text-h5: 1.375rem;           /* 22px */
+  --text-h5--line-height: 1.05;
+
+  /* ---------- Radii ---------- */
+  --radius-card: 2.5rem;         /* 40px */
+  --radius-card-sm: 2rem;        /* 32px */
+  --radius-pill: 60px;
+  --radius-avatar: 1.5rem;       /* 24px */
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  body {
+    @apply bg-bg font-body text-black antialiased;
+  }
+}
+
+/* ==========================================================================
+   COMPONENT SHORTCUTS
+   ========================================================================== */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1488px] px-gutter;
+  }
+
+  /* ----- Buttons ----- */
+  .btn-cta {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-pill border border-black
+           bg-black px-12 py-3 font-mono text-[18px] uppercase text-cta-yellow
+           transition hover:bg-black/90;
+  }
+  .btn-pill-search {
+    @apply inline-flex items-center justify-center rounded-pill bg-search-gold
+           px-5 py-2.5 font-mono text-[16px] uppercase text-black transition
+           hover:brightness-95;
+  }
+  .btn-pill-influence {
+    @apply inline-flex items-center justify-center rounded-pill bg-influence-rose
+           px-5 py-2.5 font-mono text-[16px] uppercase text-black transition
+           hover:brightness-95;
+  }
+  .btn-pill-ventures {
+    @apply inline-flex items-center justify-center rounded-pill bg-ventures-white-gold
+           px-5 py-2.5 font-mono text-[16px] uppercase text-black transition
+           hover:brightness-95;
+  }
+  .nav-link {
+    @apply inline-flex items-center justify-center px-5 py-2.5 font-mono text-[16px]
+           uppercase text-black transition hover:opacity-60;
+  }
+
+  /* ----- Display headlines ----- */
+  .h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  .h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.6vw, 2.75rem);
+    line-height: 1.05;
+    font-weight: 600;
+  }
+  .h5 {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    line-height: 1.05;
+    font-weight: 700;
+  }
+
+  /* ----- Product card large CTA buttons -----
+     No w-full here — width comes from the parent (absolute inset-x-6 in cards,
+     or w-full on the wrapper in other contexts). */
+  .card-cta {
+    @apply flex items-center justify-center gap-2.5 rounded-pill px-10 py-3
+           font-mono text-[18px] uppercase text-black transition
+           hover:brightness-95;
+  }
+}

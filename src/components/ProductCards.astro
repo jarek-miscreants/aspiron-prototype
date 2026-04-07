@@ -1,0 +1,105 @@
+---
+// Three product cards: Aspiron Search, Influence, Ventures.
+// Layout:
+//   - Top: padded content (wordmark + headline + body)
+//   - Bottom: full-bleed photo
+//   - CTA button: position-absolute over the bottom of the image
+
+// Use the clean Aspiron wordmark (same as nav) for all 3 cards.
+const imgWordmark = "https://www.figma.com/api/mcp/asset/ba95b237-4008-4969-8924-671b5504da2b";
+const imgSearchPhoto = "https://www.figma.com/api/mcp/asset/9d71bbaf-6ec5-43a7-881d-5c4a39ac0bec";
+const imgInfluencePhoto = "https://www.figma.com/api/mcp/asset/fd81ae1c-adcc-44cf-ba62-61c006eadd93";
+const imgVenturesPhoto = "https://www.figma.com/api/mcp/asset/5d6e00e6-f883-490b-94ce-de8ef67ec234";
+const imgArrow = "https://www.figma.com/api/mcp/asset/bacf88fb-1954-480c-82a6-3f9d470b7699";
+
+const cards = [
+  {
+    id: "search",
+    photo: imgSearchPhoto,
+    headline: "We help early-stage cybersecurity vendors build teams that drive growth.",
+    body: "We specialize in executive search, go-to-market and technical engineering team builds, hiring the right cybersecurity talent to fuel your growth.",
+    cta: "Explore Aspiron Search",
+    bgClass: "bg-search-gradient",
+    btnClass: "bg-search-gold",
+  },
+  {
+    id: "influence",
+    photo: imgInfluencePhoto,
+    headline: "We help early-stage cybersecurity brands turn a point-of-view into market credibility.",
+    body: "From messaging and positioning to earned media, thought leadership, and content, we shape stories that earn trust with buyers, talent, and investors.",
+    cta: "Explore Aspiron Influence",
+    bgClass: "bg-influence-gradient",
+    btnClass: "bg-influence-rose",
+  },
+  {
+    id: "ventures",
+    photo: imgVenturesPhoto,
+    headline: "We invest in the next generation of cybersecurity founders building the future of the industry.",
+    body: "Aspiron Ventures works side by side with ambitious founders, delivering support far beyond the investment cheque.",
+    cta: "Explore Aspiron Ventures",
+    bgClass: "bg-ventures-gradient",
+    btnClass: "bg-ventures-white-gold",
+  },
+];
+---
+
+<section class="relative pt-20">
+  <div class="container-page">
+    <div class="grid gap-6 grid-cols-1 lg:grid-cols-3">
+      {
+        cards.map((card) => (
+          <article
+            class:list={[
+              "flex flex-col overflow-hidden rounded-card-sm",
+              card.bgClass,
+            ]}
+          >
+            {/* Top: padded content (wordmark + headline + body) */}
+            <div class="flex flex-1 flex-col gap-8 px-8 pt-10 pb-8">
+              <img
+                src={imgWordmark}
+                alt="Aspiron"
+                class="h-10 w-auto self-start object-contain"
+              />
+              <div class="flex flex-1 flex-col gap-6 text-black/85">
+                <p class="h5">{card.headline}</p>
+                <p class="font-body text-[20px] leading-[1.4]">{card.body}</p>
+              </div>
+            </div>
+
+            {/* Bottom: full-bleed photo with CTA button absolutely positioned over it */}
+            <div class="relative h-[320px] w-full overflow-hidden">
+              <img
+                src={card.photo}
+                alt=""
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+              <a
+                href={`#${card.id}`}
+                class:list={[
+                  "absolute inset-x-6 bottom-6 card-cta",
+                  card.btnClass,
+                ]}
+              >
+                {card.cta}
+                <img src={imgArrow} alt="" class="h-6 w-6" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .bg-search-gradient {
+    background-image: linear-gradient(165deg, #fcf9ef 19%, #d8923e 61%, #8d4f05 102%);
+  }
+  .bg-influence-gradient {
+    background-image: linear-gradient(154deg, #fcf9ef 9%, #ffa57e 65%, #bf6e4b 116%);
+  }
+  .bg-ventures-gradient {
+    background-image: linear-gradient(155deg, #fcf9ef 8%, #eecab0 65%, #4c4034 123%);
+  }
+</style>

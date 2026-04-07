@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Aspiron Group — The competitive advantage to early-stage cybersecurity growth",
+  description = "Supporting founders and investors to build and scale category-defining cybersecurity companies.",
+} = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Zalando Sans + Zalando Sans Expanded + IBM Plex Mono -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

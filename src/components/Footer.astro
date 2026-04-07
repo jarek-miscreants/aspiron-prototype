@@ -1,0 +1,87 @@
+---
+const imgFooterLogo = "https://www.figma.com/api/mcp/asset/d6aaee8d-a197-4ab1-9464-01585163b37b";
+const imgSocialIcon = "https://www.figma.com/api/mcp/asset/a35b11fb-d50c-4c12-a9fe-abe576b2bf4b";
+const imgSocialIcon2 = "https://www.figma.com/api/mcp/asset/b6772800-3015-4526-9844-e79d85e69cf7";
+
+const linkColumns = [
+  {
+    title: "The Company",
+    links: ["Why Aspiron?", "Cyberbytes", "Ventures", "Contact Us"],
+  },
+  {
+    title: "Useful Links",
+    links: ["Resources", "Vacancies", "Work For Us"],
+  },
+  {
+    title: "Support",
+    links: ["Privacy Policy", "Cookies Policy", "Terms & Conditions", "HTML Sitemap"],
+  },
+];
+---
+
+<footer class="container-page py-10">
+  <div class="flex flex-col items-center gap-10 rounded-card bg-cream p-10">
+    <div class="flex w-full items-start gap-6">
+      <!-- Brand block -->
+      <div class="flex w-[394px] flex-col items-center gap-10">
+        <img src={imgFooterLogo} alt="Aspiron" class="h-[233px] w-[251px] object-contain" />
+        <div class="flex gap-2.5">
+          <a
+            href="#"
+            class="grid h-14 w-14 place-items-center rounded-[42px] bg-black transition hover:opacity-80"
+            aria-label="LinkedIn"
+          >
+            <img src={imgSocialIcon} alt="" class="h-6 w-6" />
+          </a>
+          <a
+            href="#"
+            class="grid h-14 w-14 place-items-center rounded-[42px] bg-black transition hover:opacity-80"
+            aria-label="X"
+          >
+            <img src={imgSocialIcon2} alt="" class="h-6 w-6" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Right side: contacts + 3 link columns -->
+      <div class="flex flex-1 gap-10">
+        <!-- Contact -->
+        <div class="flex flex-1 flex-col justify-center gap-10">
+          <div class="flex flex-col gap-5">
+            <p class="font-mono text-[18px] uppercase">North America</p>
+            <p class="font-body text-[17px] opacity-75">+1 315 556 2555</p>
+          </div>
+          <div class="flex flex-col gap-5">
+            <p class="font-mono text-[18px] uppercase">United Kingdom</p>
+            <p class="font-body text-[17px] opacity-75">+44 20 4530 6936</p>
+          </div>
+        </div>
+
+        <!-- Link columns -->
+        {
+          linkColumns.map((col) => (
+            <div class="flex flex-1 flex-col gap-5">
+              <p class="h5">{col.title.toUpperCase()}</p>
+              <ul class="flex flex-col gap-2.5">
+                {col.links.map((link) => (
+                  <li>
+                    <a
+                      href="#"
+                      class="font-body text-[17px] leading-[1.4] opacity-75 transition hover:opacity-100"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="font-mono text-[13px] uppercase opacity-80">
+      Copyright © Aspiron Search Limited – All rights reserved
+    </p>
+  </div>
+</footer>

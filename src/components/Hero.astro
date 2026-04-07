@@ -1,0 +1,56 @@
+---
+// Hero with chrome/gold liquid metal background image
+const imgHeroBg = "https://www.figma.com/api/mcp/asset/3ecc3d9c-8442-4cb5-84bf-c5d2af69eb40";
+const imgCynet = "https://www.figma.com/api/mcp/asset/a7a4f281-7aa3-44f2-9858-b87d6e02a046";
+const imgQradar = "https://www.figma.com/api/mcp/asset/2117e12f-f83a-4c5d-93b3-75a01ced624d";
+const imgQradar2 = "https://www.figma.com/api/mcp/asset/d0ee5770-8b44-4e7b-94d8-794561f42ad5";
+const imgCynet2 = "https://www.figma.com/api/mcp/asset/efd06e32-5d76-4b48-b42c-a0e28f717739";
+
+const trustLogos = [
+  { name: "cynet", src: imgCynet, w: 130 },
+  { name: "qradar", src: imgQradar, w: 116 },
+  { name: "cynet", src: imgCynet2, w: 130 },
+  { name: "qradar", src: imgQradar2, w: 116 },
+  { name: "cynet", src: imgCynet, w: 130 },
+  { name: "qradar", src: imgQradar, w: 116 },
+];
+---
+
+<section class="relative overflow-hidden pt-[400px] pb-20">
+  <!-- Chrome/gold liquid metal background — full viewport width, edge to edge -->
+  <img
+    src={imgHeroBg}
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-auto w-full select-none"
+  />
+
+  <div class="container-page relative flex flex-col items-center gap-20">
+    <!-- Headline + subhead + CTA -->
+    <div class="flex flex-col items-center gap-8 text-center">
+      <h1 class="h1 max-w-[1053px]">
+        The competitive advantage<br />
+        to early-stage cybersecurity growth.
+      </h1>
+      <p class="max-w-[614px] font-body text-[22px] leading-[1.4]">
+        Supporting founders and investors to build and scale category-defining
+        cybersecurity companies.
+      </p>
+      <a href="#contact" class="btn-cta mt-2">CTA Primary</a>
+    </div>
+
+    <!-- Trust logo strip -->
+    <div class="flex w-full max-w-[1488px] flex-wrap items-center justify-center gap-x-20 gap-y-6">
+      {
+        trustLogos.map((logo) => (
+          <img
+            src={logo.src}
+            alt={logo.name}
+            class="h-8 w-auto object-contain"
+            style={`max-width:${logo.w}px;`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

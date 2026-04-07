@@ -1,0 +1,29 @@
+---
+// Aspiron nav: brand mark · 3 colored brand pills · 3 page links · black Contact CTA
+const imgWordmark = "https://www.figma.com/api/mcp/asset/ba95b237-4008-4969-8924-671b5504da2b";
+---
+
+<header class="absolute inset-x-0 top-0 z-50 h-[100px]">
+  <div class="container-page flex h-full items-center justify-between">
+    <div class="flex items-center gap-12">
+      <!-- Brand mark -->
+      <a href="/" class="block h-10 w-[219px]" aria-label="Aspiron home">
+        <img src={imgWordmark} alt="Aspiron" class="h-full w-full object-contain object-left" />
+      </a>
+
+      <!-- Brand product pills -->
+      <div class="flex items-center gap-5">
+        <a href="#search" class="btn-pill-search">Search</a>
+        <a href="#influence" class="btn-pill-influence">Influence</a>
+        <a href="#ventures" class="btn-pill-ventures">Ventures</a>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-5">
+      <a href="#portfolio" class="nav-link w-[120px]">Portfolio</a>
+      <a href="#news" class="nav-link w-[120px]">News</a>
+      <a href="#about" class="nav-link w-[120px]">About</a>
+      <a href="#contact" class="btn-cta">Contact</a>
+    </div>
+  </div>
+</header>

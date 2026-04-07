@@ -1,0 +1,72 @@
+---
+// Testimonials horizontal scroller — 4+ NightDragon-style cards
+const imgNightDragonLogo = "https://www.figma.com/api/mcp/asset/ea109212-3b6d-4190-ae13-fd7208d3df7d";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/b92665c2-24d6-4b6a-978d-e5016f142116";
+const imgArrowLeft = "https://www.figma.com/api/mcp/asset/262e877b-dff4-4c4c-9e54-8870e8f89d77";
+const imgArrowRight = "https://www.figma.com/api/mcp/asset/7f54cb55-e391-4947-826f-06b89313da06";
+const imgPagination = "https://www.figma.com/api/mcp/asset/ad33f570-c7fa-4d6d-9caa-5ac537d7cbd3";
+
+const testimonials = Array.from({ length: 4 }, () => ({
+  logo: imgNightDragonLogo,
+  quote:
+    "As a venture capital firm, we understand that great talent drives the success of our portfolio companies. That's why we're proud to partner with Aspiron Search, helping our companies access top executives and candidates to fuel their growth and achieve new levels of success.",
+  avatar: imgAvatar,
+  name: "Amy De Salvatore",
+  company: "NightDragon",
+}));
+---
+
+<section class="relative py-[180px] pl-[120px]">
+  <div class="flex flex-col gap-12">
+    <!-- Slider track -->
+    <div class="-mx-[120px] px-[120px]">
+      <div class="flex gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {
+          testimonials.map((t, i) => (
+            <article
+              class:list={[
+                "flex w-[480px] shrink-0 flex-col gap-10 rounded-card px-8 py-10",
+                i === 0 ? "bg-cream" : "border border-white bg-transparent",
+              ]}
+            >
+              <img src={t.logo} alt="NightDragon" class="h-[105px] w-[150px] object-contain object-left" />
+              <div class="flex flex-col gap-[30px]">
+                <p class="font-body text-[22px] leading-[1.4]">{t.quote}</p>
+                <div class="flex items-center gap-[30px]">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    class="h-[149px] w-[149px] rounded-avatar object-cover"
+                  />
+                  <div class="flex flex-1 flex-col items-end gap-3 text-right">
+                    <p class="font-body text-[22px] leading-[1.4]">{t.name}</p>
+                    <p class="font-mono text-[18px] uppercase">{t.company}</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Pagination + arrows -->
+    <div class="flex items-center justify-center gap-6">
+      <button
+        type="button"
+        aria-label="Previous testimonial"
+        class="grid h-12 w-12 place-items-center rounded-pill border border-line bg-transparent transition hover:border-black"
+      >
+        <img src={imgArrowLeft} alt="" class="h-4 w-4 -scale-x-100" />
+      </button>
+      <img src={imgPagination} alt="" class="h-3.5 w-[110px]" />
+      <button
+        type="button"
+        aria-label="Next testimonial"
+        class="grid h-12 w-12 place-items-center rounded-pill bg-black transition hover:opacity-90"
+      >
+        <img src={imgArrowRight} alt="" class="h-4 w-4" />
+      </button>
+    </div>
+  </div>
+</section>
