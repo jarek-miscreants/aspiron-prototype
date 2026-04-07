@@ -61,8 +61,10 @@ const testimonials = Array.from({ length: 4 }, () => ({
     </div>
 
     <!-- Controls: prev arrow · dots · next arrow.
+         pr-[120px] balances the section's pl-[120px] so justify-center
+         centers on the viewport, not the asymmetric content area.
          Hidden by JS when all slides fit in the viewport (no scroll needed). -->
-    <div data-carousel-controls class="flex items-center justify-center gap-6">
+    <div data-carousel-controls class="flex w-full items-center justify-center gap-6 pr-[120px]">
       <button
         type="button"
         data-carousel-prev
