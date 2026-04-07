@@ -205,8 +205,8 @@
      No w-full here — width comes from the parent (absolute inset-x-6 in cards,
      or w-full on the wrapper in other contexts). */
   .card-cta {
-    @apply flex items-center justify-center gap-2.5 rounded-pill px-10 py-3
-           font-mono text-[18px] uppercase text-black transition
+    @apply flex items-center justify-center gap-2 rounded-pill px-8 py-3
+           font-mono text-[16px] uppercase text-black transition
            hover:brightness-95;
   }
 }
