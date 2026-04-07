@@ -15,10 +15,10 @@ const testimonials = Array.from({ length: 4 }, () => ({
 }));
 ---
 
-<section class="relative py-[180px] pl-[120px]">
+<section class="relative py-[180px] pl-5 lg:pl-[120px]">
   <div class="flex flex-col gap-12">
     <!-- Carousel track -->
-    <div class="-mx-[120px] px-[20px] lg:px-[120px]">
+    <div class="-mx-5 px-5 lg:-mx-[120px] lg:px-[120px]">
       <div
         data-carousel-track
         class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -64,7 +64,7 @@ const testimonials = Array.from({ length: 4 }, () => ({
          pr-[120px] balances the section's pl-[120px] so justify-center
          centers on the viewport, not the asymmetric content area.
          Hidden by JS when all slides fit in the viewport (no scroll needed). -->
-    <div data-carousel-controls class="flex w-full items-center justify-center gap-6 pr-[120px]">
+    <div data-carousel-controls class="flex w-full items-center justify-center gap-6 pr-5 lg:pr-[120px]">
       <button
         type="button"
         data-carousel-prev
