@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers Static Assets config.
+  // Run `npm run build` first, then `wrangler deploy` to ship the
+  // pre-built static `dist/` folder. No Worker script needed — Cloudflare
+  // serves the files directly from the edge, including the optimized
+  // .webp images that `astro build` generated via sharp.
+  "$schema": "https://json.schemastore.org/wrangler.json",
+  "name": "aspiron-prototype",
+  "compatibility_date": "2026-04-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
