@@ -4,9 +4,9 @@ import nightDragonLogo from "../assets/aspiron/nightdragon-logo.png";
 import avatar from "../assets/aspiron/testimonial-avatar.png";
 import arrowLeft from "../assets/aspiron/arrow-left.png";
 import arrowRight from "../assets/aspiron/arrow-right.png";
-import pagination from "../assets/aspiron/pagination.png";
 
-// Testimonials horizontal scroller — 4+ NightDragon-style cards
+// Testimonials carousel — horizontal scroll-snap track + interactive
+// arrow buttons and pagination dots wired up via vanilla JS.
 const testimonials = Array.from({ length: 4 }, () => ({
   quote:
     "As a venture capital firm, we understand that great talent drives the success of our portfolio companies. That's why we're proud to partner with Aspiron Search, helping our companies access top executives and candidates to fuel their growth and achieve new levels of success.",
@@ -17,14 +17,18 @@ const testimonials = Array.from({ length: 4 }, () => ({
 
 <section class="relative py-[180px] pl-[120px]">
   <div class="flex flex-col gap-12">
-    <!-- Slider track -->
+    <!-- Carousel track -->
     <div class="-mx-[120px] px-[120px]">
-      <div class="flex gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div
+        data-carousel-track
+        class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
         {
           testimonials.map((t, i) => (
             <article
+              data-carousel-slide
               class:list={[
-                "flex w-[480px] shrink-0 flex-col gap-10 rounded-card px-8 py-10",
+                "flex w-[480px] shrink-0 snap-start flex-col gap-10 rounded-card px-8 py-10 transition",
                 i === 0 ? "bg-cream" : "border border-white bg-transparent",
               ]}
             >
@@ -56,23 +60,125 @@ const testimonials = Array.from({ length: 4 }, () => ({
       </div>
     </div>
 
-    <!-- Pagination + arrows -->
-    <div class="flex items-center justify-center gap-6">
+    <!-- Controls: prev arrow · dots · next arrow.
+         Hidden by JS when all slides fit in the viewport (no scroll needed). -->
+    <div data-carousel-controls class="flex items-center justify-center gap-6">
       <button
         type="button"
+        data-carousel-prev
         aria-label="Previous testimonial"
-        class="grid h-12 w-12 place-items-center rounded-pill border border-line bg-transparent transition hover:border-black"
+        class="grid h-12 w-12 place-items-center rounded-pill border border-line bg-transparent transition hover:border-black disabled:cursor-not-allowed disabled:opacity-30"
       >
         <Image src={arrowLeft} alt="" width={32} class="h-4 w-4 -scale-x-100" />
       </button>
-      <Image src={pagination} alt="" width={220} class="h-3.5 w-[110px]" />
+
+      <!-- Pagination dots — one per slide, generated dynamically by JS would be cleaner,
+           but rendering inline keeps SSR static and avoids hydration -->
+      <div data-carousel-dots class="flex items-center gap-3">
+        {
+          testimonials.map((_, i) => (
+            <button
+              type="button"
+              data-carousel-dot={i}
+              aria-label={`Go to slide ${i + 1}`}
+              class:list={[
+                "h-2.5 rounded-pill transition-all duration-300",
+                i === 0
+                  ? "w-8 bg-black"
+                  : "w-2.5 bg-black/30 hover:bg-black/60",
+              ]}
+            />
+          ))
+        }
+      </div>
+
       <button
         type="button"
+        data-carousel-next
         aria-label="Next testimonial"
-        class="grid h-12 w-12 place-items-center rounded-pill bg-black transition hover:opacity-90"
+        class="grid h-12 w-12 place-items-center rounded-pill bg-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
       >
         <Image src={arrowRight} alt="" width={32} class="h-4 w-4" />
       </button>
     </div>
   </div>
 </section>
+
+<script>
+  // Carousel logic — scoped to this component, ~50 lines vanilla JS.
+  const track = document.querySelector<HTMLDivElement>("[data-carousel-track]");
+  const prev = document.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+  const next = document.querySelector<HTMLButtonElement>("[data-carousel-next]");
+  const controls = document.querySelector<HTMLDivElement>(
+    "[data-carousel-controls]",
+  );
+  const dots = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"),
+  );
+
+  if (track && prev && next && controls && dots.length) {
+    const slides = Array.from(
+      track.querySelectorAll<HTMLElement>("[data-carousel-slide]"),
+    );
+
+    const slideStep = () => {
+      // Width of one slide + the gap between them.
+      const first = slides[0];
+      if (!first) return 0;
+      const gap = parseFloat(getComputedStyle(track).gap) || 24;
+      return first.getBoundingClientRect().width + gap;
+    };
+
+    const currentIndex = () => {
+      return Math.round(track.scrollLeft / slideStep());
+    };
+
+    const updateState = () => {
+      // Hide controls entirely when all slides fit (no horizontal overflow).
+      // 4px fudge factor for sub-pixel rounding.
+      const overflows = track.scrollWidth > track.clientWidth + 4;
+      controls.classList.toggle("hidden", !overflows);
+
+      const idx = currentIndex();
+      const max = slides.length - 1;
+
+      // Update dot states — active dot is wider and solid black
+      dots.forEach((dot, i) => {
+        const active = i === idx;
+        dot.classList.toggle("w-8", active);
+        dot.classList.toggle("w-2.5", !active);
+        dot.classList.toggle("bg-black", active);
+        dot.classList.toggle("bg-black/30", !active);
+      });
+
+      // Update slide visual emphasis — active card has cream bg, others outlined
+      slides.forEach((slide, i) => {
+        const active = i === idx;
+        slide.classList.toggle("bg-cream", active);
+        slide.classList.toggle("border", !active);
+        slide.classList.toggle("border-white", !active);
+        slide.classList.toggle("bg-transparent", !active);
+      });
+
+      // Disable arrows at boundaries
+      prev.toggleAttribute("disabled", track.scrollLeft <= 4);
+      next.toggleAttribute(
+        "disabled",
+        track.scrollLeft >= track.scrollWidth - track.clientWidth - 4,
+      );
+    };
+
+    const goTo = (index: number) => {
+      const clamped = Math.max(0, Math.min(slides.length - 1, index));
+      track.scrollTo({ left: clamped * slideStep(), behavior: "smooth" });
+    };
+
+    prev.addEventListener("click", () => goTo(currentIndex() - 1));
+    next.addEventListener("click", () => goTo(currentIndex() + 1));
+    dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+    track.addEventListener("scroll", updateState, { passive: true });
+    window.addEventListener("resize", updateState);
+
+    updateState();
+  }
+</script>
