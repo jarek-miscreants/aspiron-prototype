@@ -30,16 +30,11 @@
   --font-mono:
     "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Display sizes */
-  --text-h1: 4.25rem;            /* 68px */
+  /* Display sizes — h1 stays viewport-based (hero), everything else
+     becomes container-fluid. See the .h2/.h5/.text-body-* clamps below. */
+  --text-h1: 4.25rem;            /* 68px (max — viewport-based) */
   --text-h1--line-height: 1.05;
   --text-h1--letter-spacing: 0.04em;
-
-  --text-h2: 2.75rem;            /* 44px */
-  --text-h2--line-height: 1.05;
-
-  --text-h5: 1.375rem;           /* 22px */
-  --text-h5--line-height: 1.05;
 
   /* ---------- Radii ---------- */
   --radius-card: 2.5rem;         /* 40px */
@@ -52,6 +47,13 @@
    BASE
    ========================================================================== */
 @layer base {
+  :root {
+    /* Container size anchors for fluid type (in rem, unitless).
+       Type interpolates linearly from MIN at 20rem to MAX at 90rem. */
+    --container-min: 20;
+    --container-max: 90;
+  }
+
   body {
     @apply bg-bg font-body text-black antialiased;
   }
@@ -63,6 +65,9 @@
 @layer components {
   .container-page {
     @apply mx-auto w-full max-w-[1488px] px-gutter;
+    /* Mark this as a query container so children can scale type with cqi.
+       inline-size = watches horizontal axis only (safe, no circular deps). */
+    container-type: inline-size;
   }
 
   /* ----- Buttons ----- */
@@ -91,7 +96,20 @@
            uppercase text-black transition hover:opacity-60;
   }
 
-  /* ----- Display headlines ----- */
+  /* ==========================================================================
+     FLUID TYPOGRAPHY
+     Linear interpolation between two anchor points using container query units.
+     Formula (Client-First style, adapted for cqi):
+       clamp(
+         MIN_REM,
+         (intercept * 1rem) + (slope * 100cqi),
+         MAX_REM
+       )
+     Where slope and intercept are computed from MIN/MAX rem values and the
+     --container-min / --container-max anchor sizes.
+     ========================================================================== */
+
+  /* ----- H1: stays viewport-based (hero, full-bleed) ----- */
   .h1 {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 5.5vw, 4.25rem);
@@ -99,17 +117,88 @@
     letter-spacing: -0.01em;
     font-weight: 700;
   }
+
+  /* ----- H2: 2rem → 2.75rem, container-fluid ----- */
   .h2 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 3.6vw, 2.75rem);
+    font-size: clamp(
+      2rem,
+      ((2 - ((2.75 - 2) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((2.75 - 2) / (var(--container-max) - var(--container-min))) * 100cqi),
+      2.75rem
+    );
     line-height: 1.05;
     font-weight: 600;
   }
+
+  /* ----- H3: 1.5rem → 2rem ----- */
+  .h3 {
+    font-family: var(--font-display);
+    font-size: clamp(
+      1.5rem,
+      ((1.5 - ((2 - 1.5) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((2 - 1.5) / (var(--container-max) - var(--container-min))) * 100cqi),
+      2rem
+    );
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  /* ----- H5: 1.125rem → 1.375rem ----- */
   .h5 {
     font-family: var(--font-display);
-    font-size: 1.375rem;
-    line-height: 1.05;
+    font-size: clamp(
+      1.125rem,
+      ((1.125 - ((1.375 - 1.125) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((1.375 - 1.125) / (var(--container-max) - var(--container-min))) * 100cqi),
+      1.375rem
+    );
+    line-height: 1.1;
     font-weight: 700;
+  }
+
+  /* ----- Body XL: 1.125rem → 1.75rem (hero subhead, big body copy) ----- */
+  .text-body-xl {
+    font-size: clamp(
+      1.125rem,
+      ((1.125 - ((1.75 - 1.125) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((1.75 - 1.125) / (var(--container-max) - var(--container-min))) * 100cqi),
+      1.75rem
+    );
+    line-height: 1.4;
+  }
+
+  /* ----- Body LG: 1rem → 1.375rem (paragraphs) ----- */
+  .text-body-lg {
+    font-size: clamp(
+      1rem,
+      ((1 - ((1.375 - 1) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((1.375 - 1) / (var(--container-max) - var(--container-min))) * 100cqi),
+      1.375rem
+    );
+    line-height: 1.4;
+  }
+
+  /* ----- Body MD: 0.9375rem → 1.25rem ----- */
+  .text-body-md {
+    font-size: clamp(
+      0.9375rem,
+      ((0.9375 - ((1.25 - 0.9375) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((1.25 - 0.9375) / (var(--container-max) - var(--container-min))) * 100cqi),
+      1.25rem
+    );
+    line-height: 1.4;
+  }
+
+  /* ----- Body SM: 0.875rem → 1.0625rem ----- */
+  .text-body-sm {
+    font-size: clamp(
+      0.875rem,
+      ((0.875 - ((1.0625 - 0.875) / (var(--container-max) - var(--container-min)) * var(--container-min))) * 1rem
+        + ((1.0625 - 0.875) / (var(--container-max) - var(--container-min))) * 100cqi),
+      1.0625rem
+    );
+    line-height: 1.4;
   }
 
   /* ----- Product card large CTA buttons -----
