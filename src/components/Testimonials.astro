@@ -2,8 +2,6 @@
 import { Image } from "astro:assets";
 import nightDragonLogo from "../assets/aspiron/nightdragon-logo.png";
 import avatar from "../assets/aspiron/testimonial-avatar.png";
-import arrowLeft from "../assets/aspiron/arrow-left.png";
-import arrowRight from "../assets/aspiron/arrow-right.png";
 
 // Testimonials carousel — horizontal scroll-snap track + interactive
 // arrow buttons and pagination dots wired up via vanilla JS.
@@ -67,9 +65,14 @@ const testimonials = Array.from({ length: 4 }, () => ({
         type="button"
         data-carousel-prev
         aria-label="Previous testimonial"
-        class="grid h-12 w-12 place-items-center rounded-pill border border-line bg-transparent transition hover:border-black disabled:cursor-not-allowed disabled:opacity-30"
+        class="grid h-12 w-12 place-items-center rounded-pill bg-black text-cta-yellow transition hover:opacity-90 disabled:cursor-not-allowed disabled:border disabled:border-line disabled:bg-transparent disabled:text-line disabled:hover:opacity-100"
       >
-        <Image src={arrowLeft} alt="" width={32} class="h-4 w-4 -scale-x-100" />
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M8.00065 2.66675L8.94065 3.60675L5.22065 7.33342H13.334V8.66675H5.22065L8.94065 12.3934L8.00065 13.3334L2.66732 8.00008L8.00065 2.66675Z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
 
       <!-- Pagination dots — one per slide, generated dynamically by JS would be cleaner,
@@ -96,9 +99,14 @@ const testimonials = Array.from({ length: 4 }, () => ({
         type="button"
         data-carousel-next
         aria-label="Next testimonial"
-        class="grid h-12 w-12 place-items-center rounded-pill bg-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+        class="grid h-12 w-12 place-items-center rounded-pill bg-black text-cta-yellow transition hover:opacity-90 disabled:cursor-not-allowed disabled:border disabled:border-line disabled:bg-transparent disabled:text-line disabled:hover:opacity-100"
       >
-        <Image src={arrowRight} alt="" width={32} class="h-4 w-4" />
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M7.99935 2.66675L7.05935 3.60675L10.7793 7.33342H2.66602V8.66675H10.7793L7.05935 12.3934L7.99935 13.3334L13.3327 8.00008L7.99935 2.66675Z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
     </div>
   </div>
@@ -179,6 +187,8 @@ const testimonials = Array.from({ length: 4 }, () => ({
     track.addEventListener("scroll", updateState, { passive: true });
     window.addEventListener("resize", updateState);
 
-    updateState();
+    // Defer initial state read until after the browser has settled scroll-snap.
+    // Otherwise scrollLeft may be a stale snapshot from before layout finished.
+    requestAnimationFrame(updateState);
   }
 </script>
